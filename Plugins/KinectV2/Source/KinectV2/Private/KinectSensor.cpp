@@ -91,6 +91,7 @@ uint32 FKinectSensor::Run(){
 		break;
 		case COLOR_WAIT_OBJECT:
 		{
+			// uncommented by liam
 			TComPtr<IColorFrameArrivedEventArgs> pArgs = nullptr;
 			hr = m_pColorFrameReader->GetFrameArrivedEventData(ColorEventHandle, &pArgs);
 			if (SUCCEEDED(hr)){
@@ -102,13 +103,14 @@ uint32 FKinectSensor::Run(){
 		break;
 		case INFRARED_WAIT_OBJECT:
 		{
+			// uncommented by liam
 			TComPtr<IInfraredFrameArrivedEventArgs> pArgs = nullptr;
 			hr = m_pInfraredFrameReader->GetFrameArrivedEventData(InfraredEventHandle, &pArgs);
 			if (SUCCEEDED(hr)){
 				ProcessInfraredFrame(pArgs);
 			}
 			pArgs.Reset();
-			//SAFE_RELEASE(pArgs);
+			////SAFE_RELEASE(pArgs);
 		}
 		break;
 		case DEPTH_WAIT_OBJECT:
@@ -138,10 +140,10 @@ uint32 FKinectSensor::Run(){
 		break;
 		case  POINTER_ENTERED_WAIT_OBJECT:
 		{
-			TComPtr<IKinectPointerEventArgs> pArgs;
-			m_pCoreWindow->GetPointerEnteredEventData(PointerEnteredEventHandle, &pArgs);
+			//TComPtr<IKinectPointerEventArgs> pArgs;
+			//m_pCoreWindow->GetPointerEnteredEventData(PointerEnteredEventHandle, &pArgs);
 
-			pArgs.Reset();
+			//pArgs.Reset();
 		}
 		break;
 		case POINTER_EXITED_WAIT_OBJECT:
@@ -151,25 +153,25 @@ uint32 FKinectSensor::Run(){
 		break;
 		case POINTER_MOVED_WAIT_OBJECT:
 		{
-			TComPtr<IKinectPointerEventArgs> pArgs;
-			m_pCoreWindow->GetPointerMovedEventData(PointerMovedEventHandle, &pArgs);
+			//TComPtr<IKinectPointerEventArgs> pArgs;
+			//m_pCoreWindow->GetPointerMovedEventData(PointerMovedEventHandle, &pArgs);
 
-			pArgs.Reset();
+			//pArgs.Reset();
 
 		}
 		break;
 		case AUDIO_WAIT_OBJECT:
 		{
-			TComPtr<IAudioBeamFrameArrivedEventArgs> pArgs = nullptr;
+			//TComPtr<IAudioBeamFrameArrivedEventArgs> pArgs = nullptr;
 
-			hr = m_pAudioBeamFrameReader->GetFrameArrivedEventData(AudioBeamEventHandle, &pArgs);
+			//hr = m_pAudioBeamFrameReader->GetFrameArrivedEventData(AudioBeamEventHandle, &pArgs);
 
-			if (SUCCEEDED(hr)){
+			//if (SUCCEEDED(hr)){
 
-			}
+			//}
 
-			pArgs.Reset();
-			//SAFE_RELEASE(pArgs);
+			//pArgs.Reset();
+			////SAFE_RELEASE(pArgs);
 		}
 		break;
 		}
@@ -244,7 +246,7 @@ FKinectSensor:: ~FKinectSensor(){
 
 bool FKinectSensor::Init(){
 
-
+	UE_LOG(LogTemp, Warning, TEXT("------------------ Initializing kinect"));
 	HRESULT hr;
 
 	hr = GetDefaultKinectSensor(&m_pKinectSensor);
@@ -366,10 +368,10 @@ bool FKinectSensor::Init(){
 		//m_pAudioBeamFrameReader->SubscribeFrameArrived(&AudioBeamEventHandle);
 
 		bStop = false;
-
+		UE_LOG(LogTemp, Warning, TEXT("------------------ Initialized kinect"));
 		return true;
 	}
-
+	UE_LOG(LogTemp, Warning, TEXT("------------------ Failed to init kinect?"));
 	return false;
 }
 
@@ -384,6 +386,7 @@ void FKinectSensor::StartSensor()
 {
 	if (!pKinectThread)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("------------------ Starting kinect thread"));
 
 		pKinectThread = FRunnableThread::Create(this, *(FString::Printf(TEXT("FKinectThread%ul"), ThreadNameWorkaround++)), 0, EThreadPriority::TPri_AboveNormal);
 
@@ -393,7 +396,7 @@ void FKinectSensor::StartSensor()
 
 void FKinectSensor::ShutDownSensor()
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("------------------ Shutting down kinect"));
 	if (pKinectThread) {
 
 		pKinectThread->Kill(true);
@@ -407,7 +410,7 @@ void FKinectSensor::ShutDownSensor()
 
 void FKinectSensor::Exit()
 {
-
+	UE_LOG(LogTemp, Warning, TEXT("------------------ Exiting kinect"));
 	if (m_pBodyFrameReader)
 		m_pBodyFrameReader->UnsubscribeFrameArrived(BodyEventHandle);
 
@@ -838,8 +841,17 @@ void FKinectSensor::ConvertDepthData(uint16*pDepthBuffer, RGBQUAD*pDepthRGBX, US
 			// Consider using a lookup table instead when writing production code.
 			BYTE intensity = static_cast<BYTE>((depth >= minDepth) && (depth <= maxDepth) ? (depth % 256) : 0);
 
-			pRGBX->rgbRed = intensity;
-			pRGBX->rgbGreen = intensity;
+			// Modified by Liam
+			// R: Full depth value
+			// G: 
+
+			// Remap value
+			// to_low + (value - from_low) * (to_high - to_low) / (from_high - from_low)
+
+			BYTE mapped = 256 - static_cast<BYTE>(0 + (depth - minDepth) * (256 - 0) / (maxDepth - minDepth));
+
+			pRGBX->rgbRed = mapped;
+			pRGBX->rgbGreen = depth;
 			pRGBX->rgbBlue = intensity;
 
 			++pRGBX;

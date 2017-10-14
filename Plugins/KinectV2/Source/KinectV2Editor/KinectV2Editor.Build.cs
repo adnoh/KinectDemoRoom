@@ -29,12 +29,12 @@ public class KinectV2Editor : ModuleRules
 			}
         );
 
-        CircularlyReferencedDependentModules.AddRange(
+        /*CircularlyReferencedDependentModules.AddRange(
             new string[] {
                 "UnrealEd",
                 "GraphEditor",
             }
-        ); 
+        ); */
 
     }
 }

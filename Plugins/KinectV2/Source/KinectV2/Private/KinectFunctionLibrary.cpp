@@ -496,6 +496,35 @@ FVector2D UKinectFunctionLibrary::ConvertBodyPointToScreenPoint(const FVector&Bo
 	return FVector2D(-1, -1);
 }
 
+FTransform UKinectFunctionLibrary::GetBoneFTransformRelToBone(const FBody TheBody, const EJoint::Type TheJointType, const EJoint::Type ComparedToJoint)
+{
+	FTransform outTrans = GetBoneFTransform(TheBody, TheJointType);
+	FVector FoundLoc = GetBoneFTransform(TheBody, TheJointType).GetLocation() - GetBoneFTransform(TheBody, ComparedToJoint).GetLocation();
+	outTrans.SetLocation(FoundLoc);
+	return outTrans;
+}
+
+
+FTransform UKinectFunctionLibrary::GetBoneFTransform(const FBody TheBody, const EJoint::Type TheJointType)
+{
+	FKinectBone theBone = GetBone(TheBody, TheJointType);
+	FVector BoneLoc = theBone.JointTransform.GetLocation();
+	BoneLoc.X = BoneLoc.X * -1;
+	BoneLoc *= 100;
+	theBone.JointTransform.SetLocation(BoneLoc);
+	return theBone.JointTransform;
+}
+
+
+FKinectBone UKinectFunctionLibrary::GetBone(const FBody TheBody, const EJoint::Type TheJointType)
+{
+	int32 index = TheJointType;
+	if (TheBody.KinectBones.Num() - 1 >= index)
+	{
+		return TheBody.KinectBones[index];
+	}
+	return FKinectBone();
+}
 
 UKinectEventManager* UKinectFunctionLibrary::GetKinectEventManager()
 {
@@ -510,8 +539,10 @@ UKinectEventManager* UKinectFunctionLibrary::GetKinectEventManager()
 
 void UKinectFunctionLibrary::StartSensor()
 {
+	UE_LOG(LogTemp, Warning, TEXT("------------------ TRYING TO START kinect"));
 	if (StartSensorEvent.IsBound())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("------------------ START BOUND TRYING TO EXECTURE kinect"));
 		StartSensorEvent.Execute();
 	}
 }

@@ -14,7 +14,7 @@ EvaluateAnimationGraph(true)
 
 	if (CurrentSkeleton)
 	{
-		auto num = CurrentSkeleton->PreviewAttachedAssetContainer.Num();
+		//auto num = CurrentSkeleton->PreviewAttachedAssetContainer.Num();
 	}
 
 	if (BoneAdjustments.Num() < 25)
@@ -37,10 +37,10 @@ EvaluateAnimationGraph(true)
 }
 
 
-bool UKinectAnimInstance::NativeEvaluateAnimation(FPoseContext& Output)
-{
-
-	if (RootNode != nullptr && EvaluateAnimationGraph)
+//bool UKinectAnimInstance::NativeEvaluateAnimation(FPoseContext& Output)
+//{
+	
+	/*if (RootNode != nullptr && EvaluateAnimationGraph)
 	{
 		//SCOPE_CYCLE_COUNTER(STAT_AnimGraphEvaluate);
 
@@ -61,7 +61,7 @@ bool UKinectAnimInstance::NativeEvaluateAnimation(FPoseContext& Output)
 	if (OwningComponent)
 	{
 
-		ProccessSkeleton();
+		ProccessSkeleton();*/
 
 
 		/*
@@ -121,12 +121,12 @@ bool UKinectAnimInstance::NativeEvaluateAnimation(FPoseContext& Output)
 
 		}
 		*/
-	}
+	//}
 
 
 
-	return true;
-}
+//	return false;
+//}
 
 #pragma  optimize ("",off)
 void UKinectAnimInstance::NativeInitializeAnimation()
@@ -273,6 +273,8 @@ void UKinectAnimInstance::OnKinectBodyEvent(EAutoReceiveInput::Type KinectPlayer
 {
 
 	CurrBody = Skeleton;
+
+	ProccessSkeleton();
 
 	if (!CurrentSkeleton)
 		return;

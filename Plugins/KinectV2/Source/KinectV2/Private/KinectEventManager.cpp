@@ -23,6 +23,10 @@ void UKinectEventManager::ProcessNewBodyFrameEvent(const struct FBodyFrame & New
 	
 	if (RawBodyFrameEvent.IsBound()){
 		RawBodyFrameEvent.Broadcast(NewBodyFrame);
+		//if (GEngine)
+		//{
+		//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Raw Data Sent!"));
+		//}
 	}
 	
 	for (int32 i = 0; i < NewBodyFrame.Bodies.Num(); ++i)
@@ -58,10 +62,10 @@ void UKinectEventManager::ProcessNewBodyFrameEvent(const struct FBodyFrame & New
 		else if (TrackingIds[i] != 0){
 			
 			if (AssignedKinectPlayerController.Contains(TrackingIds[i])){
-				this->SkeletonLost(AssignedKinectPlayerController[TrackingIds[i]].GetValue());
+				this->SkeletonLost(AssignedKinectPlayerController[TrackingIds[i]].GetValue(), i);
 				if (SkeletonLostEvent.IsBound())
 				{
-					SkeletonLostEvent.Broadcast(AssignedKinectPlayerController[TrackingIds[i]].GetValue());
+					SkeletonLostEvent.Broadcast(AssignedKinectPlayerController[TrackingIds[i]].GetValue(), i);
 				}
 				AssignedKinectPlayerController.Remove(TrackingIds[i]);
 				TrackingIds[i] = 0;

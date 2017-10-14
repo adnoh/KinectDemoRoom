@@ -22,7 +22,7 @@ namespace EKinectPlayer
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FNewSkeletonDetectedEvent, const struct FBody&, NewSkeleton,int32,SkeletonIndex);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FSkeletonLostEvent, EAutoReceiveInput::Type, KinectPlayerLost);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FSkeletonLostEvent, EAutoReceiveInput::Type, KinectPlayerLost,int32,SkeletonIndex);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectColorFrameEvent, const class UTexture2D*, ColorFrameTexture);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectDepthFrameEvent, const class UTexture2D*, DepthFrameTexture);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FNewKinectInfraredFrameEvent, const class UTexture2D*, InfraredFrameTexture);
@@ -74,7 +74,7 @@ public:
 		 * @param	KinectPlayer	The kinect player.
 		 **************************************************************************************************/
 
-		 void SkeletonLost(EAutoReceiveInput::Type KinectPlayer);
+		 void SkeletonLost(EAutoReceiveInput::Type KinectPlayer, int32 SkeletonIndex);
 
 	UFUNCTION(BlueprintCallable, Category = "Kinect")
 

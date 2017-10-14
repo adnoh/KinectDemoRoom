@@ -63,7 +63,7 @@ public:
 	 * @return	true to indicate to Super not to evaluate animation graph again
 	 **************************************************************************************************/
 
-	virtual bool NativeEvaluateAnimation(FPoseContext& Output) override;
+	//virtual bool NativeEvaluateAnimation(FPoseContext& Output) override;
 
 	//UKinectAnimInstance(const class FObjectInitializer& PCIP);
 

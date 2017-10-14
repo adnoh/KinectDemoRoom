@@ -27,17 +27,17 @@ public class K4WLib : ModuleRules
             string LibPath = SDKDIR + "Lib/" + PlatformPath;
 
             PublicLibraryPaths.Add(LibPath);
-            PublicAdditionalLibraries.AddRange(new string[] { "Kinect20.lib", "Kinect20.face.lib" });
+            PublicAdditionalLibraries.AddRange(new string[] { "Kinect20.lib", /*"Kinect20.face.lib" */});
 
-            PublicDelayLoadDLLs.AddRange(new string[] {"Kinect20.Face.dll", "Kinect20.dll",  "Microsoft.Kinect.Face.dll", /*vgbtechs/AdaBoostTech.dll", "vgbtechs/RFRProgressTech.dll" */});
+            PublicDelayLoadDLLs.AddRange(new string[] { /*"Kinect20.Face.dll",*/ "Kinect20.dll",  /*"Microsoft.Kinect.Face.dll", /*vgbtechs/AdaBoostTech.dll", "vgbtechs/RFRProgressTech.dll" */});
 
 
-
+            /*
             RuntimeDependencies.Add(new RuntimeDependency(Path.Combine(RedistDirectory, "Face", ShortPlatform, "Kinect20.Face.dll")));
             RuntimeDependencies.Add(new RuntimeDependency(Path.Combine(RedistDirectory, "Face", ShortPlatform, "NuiDataBase")));
             RuntimeDependencies.Add(new RuntimeDependency(Path.Combine(RedistDirectory, "Face", ShortPlatform, "Microsoft.Kinect.Face.dll")));
             RuntimeDependencies.Add(new RuntimeDependency(Path.Combine(RedistDirectory, "Face", ShortPlatform, "Microsoft.Kinect.Face.xml")));
-
+            */
           
 
 

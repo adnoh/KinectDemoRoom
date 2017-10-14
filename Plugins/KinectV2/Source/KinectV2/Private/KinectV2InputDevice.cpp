@@ -205,6 +205,10 @@ void FKinectV2InputDevice::SendControllerEvents(){
 
 			if (newBodyFrame){
 				KinectManeger->ProcessNewBodyFrameEvent(Frame, MessageHandler);
+				//if (GEngine)
+				//{
+				//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("SEND NEW BODY FRAME!"));
+				//}
 				if (KinectManeger->GetControlMouse())
 				{
 					MessageHandler->OnMouseMove();
@@ -213,6 +217,10 @@ void FKinectV2InputDevice::SendControllerEvents(){
 			if (KinectManeger->OnNewKinectColorFrame.IsBound()){
 				KinectSensor->UpdateColorTexture(ColorFrame);
 				KinectManeger->OnNewKinectColorFrame.Broadcast(ColorFrame);
+				//if (GEngine)
+				//{
+				//	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Send Event Color Frame To nodes!"));
+				//}
 			}
 
 			if (KinectManeger->OnNewKinectDepthFrame.IsBound())
@@ -253,16 +261,18 @@ bool FKinectV2InputDevice::Exec(UWorld* InWorld, const TCHAR* Cmd, FOutputDevice
 		if (FParse::Command(&Cmd, TEXT("on")) || FParse::Command(&Cmd, TEXT("1")))
 		{
 			KinectSensor->StartSensor();
+			return true;
 		}
 		else if (FParse::Command(&Cmd, TEXT("off")) || FParse::Command(&Cmd, TEXT("0")))
 		{
 			KinectSensor->ShutDownSensor();
+			return true;
 		}
-		
+		return false;
 
 	}
 
-	return true;
+	return false;
 
 }
 

@@ -74,7 +74,7 @@ namespace EHandState {
 
 }
 
-UENUM()
+UENUM(BlueprintType)
 enum class EKinectStreamType : uint8
 {
 	KST_Color UMETA(DisplayName = "Color Stream"),
@@ -413,6 +413,25 @@ public:
 
 		 static void BreakBodyFrame(const FBodyFrame& InBodyFrame, TArray<FBody> &Bodies);
 
+
+	UFUNCTION(BlueprintPure, Category = "Kinect|Body")
+
+		/**************************************************************************************************
+		GetBone Ref
+		**************************************************************************************************/
+
+		static FTransform GetBoneFTransform(const FBody TheBody, EJoint::Type TheJointType);
+
+
+	UFUNCTION(BlueprintPure, Category = "Kinect|Body")
+
+		/**************************************************************************************************
+GetBone Ref
+		**************************************************************************************************/
+
+		static FKinectBone GetBone(const FBody TheBody, EJoint::Type TheJointType);
+
+
 	UFUNCTION(BlueprintPure, Category = "Kinect|Body", meta = (NativeBreakFunc))
 
 		/**************************************************************************************************
@@ -629,6 +648,11 @@ public:
 		 static FVector2D ConvertBodyPointToScreenPoint(const FVector& BodyPoint, int32 ScreenSizeX, int32 ScreenSizeY);
 
 
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Kinect")
+	static FTransform GetBoneFTransformRelToBone(const FBody TheBody, const EJoint::Type TheJointType, const EJoint::Type ComparedToJoint);
+
+
 	UFUNCTION(BlueprintPure, Category = "Kinect|CoordianteMapper")
 
 		/**************************************************************************************************
@@ -641,7 +665,7 @@ public:
 		 * @return	A TArray&lt;FTransform&gt;
 		 **************************************************************************************************/
 
-		 static TArray<FTransform> MirrorKinectSkeleton(const FBody& BodyToMirror, float PosLocScale = 1.f);
+	static TArray<FTransform> MirrorKinectSkeleton(const FBody& BodyToMirror, float PosLocScale = 1.f);
 
 
 	UFUNCTION(BlueprintPure, Category = "Kinect|Math")
